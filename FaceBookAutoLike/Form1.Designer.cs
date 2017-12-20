@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Windows.Forms;
 
 namespace FaceBookAutoLike
 {
@@ -30,8 +31,12 @@ namespace FaceBookAutoLike
         /// </summary>
         protected void InitializeComponent()
         {
-            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.lbCmt = new System.Windows.Forms.Label();
+            this.cbComment = new System.Windows.Forms.CheckBox();
+            this.txtComment = new System.Windows.Forms.TextBox();
             this.tabReact = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnCheckGroup = new System.Windows.Forms.Button();
@@ -65,27 +70,57 @@ namespace FaceBookAutoLike
             this.label2 = new System.Windows.Forms.Label();
             this.txtToken = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.lbCmt = new System.Windows.Forms.Label();
-            this.cbComment = new System.Windows.Forms.CheckBox();
-            this.txtComment = new System.Windows.Forms.TextBox();
-            this.tabControl.SuspendLayout();
-            this.tabReact.SuspendLayout();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage2.SuspendLayout();
+            this.tabReact.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabControl.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabControl
+            // tabPage2
             // 
-            this.tabControl.Controls.Add(this.tabReact);
-            this.tabControl.Controls.Add(this.tabPage2);
-            this.tabControl.Location = new System.Drawing.Point(0, 1);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(607, 381);
-            this.tabControl.TabIndex = 22;
+            this.tabPage2.Controls.Add(this.lbCmt);
+            this.tabPage2.Controls.Add(this.cbComment);
+            this.tabPage2.Controls.Add(this.txtComment);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(599, 355);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Comment";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // lbCmt
+            // 
+            this.lbCmt.AutoSize = true;
+            this.lbCmt.Location = new System.Drawing.Point(61, 179);
+            this.lbCmt.Name = "lbCmt";
+            this.lbCmt.Size = new System.Drawing.Size(51, 13);
+            this.lbCmt.TabIndex = 44;
+            this.lbCmt.Text = "Comment";
+            // 
+            // cbComment
+            // 
+            this.cbComment.AutoSize = true;
+            this.cbComment.Location = new System.Drawing.Point(478, 178);
+            this.cbComment.Name = "cbComment";
+            this.cbComment.Size = new System.Drawing.Size(59, 17);
+            this.cbComment.TabIndex = 43;
+            this.cbComment.Text = "Enable";
+            this.cbComment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.cbComment.UseVisualStyleBackColor = true;
+            // 
+            // txtComment
+            // 
+            this.txtComment.Location = new System.Drawing.Point(148, 156);
+            this.txtComment.Multiline = true;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.Size = new System.Drawing.Size(324, 60);
+            this.txtComment.TabIndex = 42;
             // 
             // tabReact
             // 
+            this.tabReact.Controls.Add(this.pictureBox1);
             this.tabReact.Controls.Add(this.label14);
             this.tabReact.Controls.Add(this.textBox1);
             this.tabReact.Controls.Add(this.btnCheckGroup);
@@ -126,6 +161,16 @@ namespace FaceBookAutoLike
             this.tabReact.TabIndex = 0;
             this.tabReact.Text = "Reaction";
             this.tabReact.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            
+            this.pictureBox1.Location = new System.Drawing.Point(448, 266);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(28, 28);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 58;
+            this.pictureBox1.TabStop = false;
             // 
             // label14
             // 
@@ -302,6 +347,7 @@ namespace FaceBookAutoLike
             this.btnStop.TabIndex = 34;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Enabled = false;
             this.btnStop.Click += new System.EventHandler(this.btnClick);
             // 
             // btnStart
@@ -420,46 +466,15 @@ namespace FaceBookAutoLike
             this.label1.TabIndex = 22;
             this.label1.Text = "Token";
             // 
-            // tabPage2
+            // tabControl
             // 
-            this.tabPage2.Controls.Add(this.lbCmt);
-            this.tabPage2.Controls.Add(this.cbComment);
-            this.tabPage2.Controls.Add(this.txtComment);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(599, 355);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Comment";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // lbCmt
-            // 
-            this.lbCmt.AutoSize = true;
-            this.lbCmt.Location = new System.Drawing.Point(61, 179);
-            this.lbCmt.Name = "lbCmt";
-            this.lbCmt.Size = new System.Drawing.Size(51, 13);
-            this.lbCmt.TabIndex = 44;
-            this.lbCmt.Text = "Comment";
-            // 
-            // cbComment
-            // 
-            this.cbComment.AutoSize = true;
-            this.cbComment.Location = new System.Drawing.Point(478, 178);
-            this.cbComment.Name = "cbComment";
-            this.cbComment.Size = new System.Drawing.Size(59, 17);
-            this.cbComment.TabIndex = 43;
-            this.cbComment.Text = "Enable";
-            this.cbComment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cbComment.UseVisualStyleBackColor = true;
-            // 
-            // txtComment
-            // 
-            this.txtComment.Location = new System.Drawing.Point(148, 156);
-            this.txtComment.Multiline = true;
-            this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(324, 60);
-            this.txtComment.TabIndex = 42;
+            this.tabControl.Controls.Add(this.tabReact);
+            this.tabControl.Controls.Add(this.tabPage2);
+            this.tabControl.Location = new System.Drawing.Point(0, 1);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(607, 381);
+            this.tabControl.TabIndex = 22;
             // 
             // Form1
             // 
@@ -470,19 +485,32 @@ namespace FaceBookAutoLike
             this.Name = "Form1";
             this.Text = "Auto Reactions";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.tabControl.ResumeLayout(false);
-            this.tabReact.ResumeLayout(false);
-            this.tabReact.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.tabReact.ResumeLayout(false);
+            this.tabReact.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tabControl.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label lbCmt;
+        private System.Windows.Forms.CheckBox cbComment;
+        public System.Windows.Forms.TextBox txtComment;
         private System.Windows.Forms.TabPage tabReact;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Button btnCheckGroup;
+        private System.Windows.Forms.DateTimePicker dateTimePickerEnd;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.DateTimePicker dateTimePickerFrom;
+        private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtDelayTimeP;
         private System.Windows.Forms.Label label9;
@@ -508,18 +536,7 @@ namespace FaceBookAutoLike
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtToken;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Label lbCmt;
-        private System.Windows.Forms.CheckBox cbComment;
-        private System.Windows.Forms.TextBox txtComment;
-        private System.Windows.Forms.DateTimePicker dateTimePickerFrom;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Button btnCheckGroup;
-        private System.Windows.Forms.DateTimePicker dateTimePickerEnd;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.TabControl tabControl;
     }
 }
 

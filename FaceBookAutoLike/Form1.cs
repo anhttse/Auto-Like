@@ -14,7 +14,8 @@ namespace FaceBookAutoLike
     {
 
         private bool _isStart = true;
-        private Thread thAction;
+        private CancellationTokenSource cts;
+        private Thread _thAction;
         public Form1()
         {
             InitializeComponent();
@@ -40,8 +41,9 @@ namespace FaceBookAutoLike
             switch (((Button)sender).Name)
             {
                 case "btnStart":
+                    
                     //WriteToResource();
-
+                    cts = new CancellationTokenSource();
                     var auto = new Auto();
                     auto.Token = txtToken.Text;
                     auto.Version = txtVersion.Text;
@@ -64,11 +66,20 @@ namespace FaceBookAutoLike
 
 
                     //auto.AutoReactFriends(reactionType, delayTimeF, delayTimeP, 25);
-                    var thAction = new Thread(() => Run(auto, reactionType, delayTimeF, delayTimeP, 25));
-                    thAction.Start();
+                    _isStart = true;
+                    _thAction = new Thread(() => Run(auto, reactionType, delayTimeF, delayTimeP, 25));
+                    _thAction.Start();
+                    btnStart.Enabled = false;
+                    btnStop.Enabled = true;
                     break;
                 case "btnStop":
+                    cts?.Cancel();
                     _isStart = false;
+                    
+                    _thAction.Abort();
+                    btnStop.Enabled = false;
+                    btnStart.Enabled = true;
+                    MessageBox.Show("Done");
                     break;
             }
 
@@ -81,16 +92,16 @@ namespace FaceBookAutoLike
                 var startTime = dateTimePickerFrom.Value;
                 var endTime = dateTimePickerEnd.Value;
                 var timeNow = DateTime.Now;
-                var rsStart = DateTime.Compare(timeNow, startTime);
-                var rsEnd = DateTime.Compare(timeNow, endTime);
+                var rsStart = TimeSpan.Compare(timeNow.TimeOfDay, startTime.TimeOfDay);
+                var rsEnd = TimeSpan.Compare(timeNow.TimeOfDay, endTime.TimeOfDay);
                 if (rsStart >= 0 && rsEnd <= 0)
                 {
-                    auto.AutoReactFriends(reactionType, delayTimeF, delayTimeP, 25);
+                    this.pictureBox1.Image = global::FaceBookAutoLike.Properties.Resources.loading;
+                    auto.AutoReactFriends(pictureBox1,reactionType, delayTimeF, delayTimeP, 25,cts.Token);
                 }
                 Thread.Sleep(1000);
             } while (_isStart);
-
-            MessageBox.Show("Done");
+            
         }
 
         private void RemoveText(object sender, EventArgs e)
