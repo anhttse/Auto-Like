@@ -20,5 +20,6 @@ namespace FaceBookAutoLike
         public Nullable<bool> Done { get; set; }
         public string Done_Time { get; set; }
         public string F_ID { get; set; }
+        public string Message { get; set; }
     }
 }

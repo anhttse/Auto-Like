@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.EntityClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,7 +24,14 @@ namespace FaceBookAutoLike
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Application.ApplicationExit += new EventHandler(OnApplicationExit);
+            var eCsb = new EntityConnectionStringBuilder();
+            eCsb.Provider = "System.Data.SqlClient";
+            eCsb.ProviderConnectionString =
+                @"data source=210.245.8.58;initial catalog=FBL;persist security info=True;user id=fbl;password=tsd@123;MultipleActiveResultSets=True;App=EntityFramework;Charset=utf8&quot;";
+            eCsb.Metadata = "res://*";
+            Utilities.ConnectionString = eCsb.ToString();
+
+            Application.ApplicationExit += OnApplicationExit;
             txtToken.Text = DefaultValue.Token;
             txtVersion.Text = DefaultValue.Version;
             txtException.Text = DefaultValue.ExceptionList;
@@ -67,7 +75,7 @@ namespace FaceBookAutoLike
 
                     //auto.AutoReactFriends(reactionType, delayTimeF, delayTimeP, 25);
                     _isStart = true;
-                    _thAction = new Thread(() => Run(auto, reactionType, delayTimeF, delayTimeP, 25));
+                    _thAction = new Thread(() => Run(auto,reactionType, delayTimeF, delayTimeP, 25));
                     _thAction.Start();
                     btnStart.Enabled = false;
                     btnStop.Enabled = true;
@@ -85,7 +93,7 @@ namespace FaceBookAutoLike
 
         }
 
-        private void Run(Auto auto, string reactionType, int delayTimeF, int delayTimeP, int limit)
+        private void Run(Auto auto,string reactionType, int delayTimeF, int delayTimeP, int limit)
         {
             do
             {
@@ -97,7 +105,7 @@ namespace FaceBookAutoLike
                 if (rsStart >= 0 && rsEnd <= 0)
                 {
                     this.pictureBox1.Image = global::FaceBookAutoLike.Properties.Resources.loading;
-                    auto.AutoReactFriends(pictureBox1,reactionType, delayTimeF, delayTimeP, 25,cts.Token);
+                    auto.AutoReactFriends(pictureBox1,reactionType,delayTimeF,delayTimeP,10,cts.Token);
                 }
                 Thread.Sleep(1000);
             } while (_isStart);

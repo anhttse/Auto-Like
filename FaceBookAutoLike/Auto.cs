@@ -16,6 +16,12 @@ namespace FaceBookAutoLike
     {
         public string Token { private get; set; }
         public string Version { private get; set; }
+        public string FId { get; set; }
+        private readonly Dao _dao;
+        public Auto()
+        {
+            _dao = new Dao();
+        }
         public CancellationTokenSource TokenSource { get => tokenSource; set => tokenSource = value; }
 
         private CancellationTokenSource tokenSource = new CancellationTokenSource();
@@ -32,7 +38,7 @@ namespace FaceBookAutoLike
                     var task = AutoReactionToUser(user, type, delayTimePost, limitPost, ctoken);
                     lTasks.Add(task);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     WriteResultToFile(e.Message);
                 }
@@ -47,14 +53,21 @@ namespace FaceBookAutoLike
         private Task<bool> AutoReactionToUser(User user, string type, int delayTime, int limit, CancellationToken ctoken)
         {
             var posts = GetPosts(user.Id, limit);
+            var listPostDone = _dao.GetPostDoneOfF(user.Id);
+            posts.data = posts.data.Where(x => !listPostDone.Contains(x.Id));
+            if (!posts.data.Any())
+            {
+                return null;
+            }
+
             foreach (var post in posts.data)
             {
                 var message = React(user, post, type);
                 WriteResultToFile(message);
                 Thread.Sleep(delayTime);
             }
-            return Task.Factory.StartNew(()=>true,ctoken);
-//            return Task.Factory.StartNew(() => true);
+            return Task.Factory.StartNew(() => true, ctoken);
+            //            return Task.Factory.StartNew(() => true);
         }
 
         private string React(User user, Post post, string typeReact)
@@ -69,11 +82,15 @@ namespace FaceBookAutoLike
                 var url = $"https://graph.facebook.com/{Version}/{post.Id}/reactions";
                 var js = fbClient.Post(url, new { type = typeReact });
                 var rs = JObject.FromObject(js).GetValue("success").ToString().ToLowerInvariant();
-                 message = rs.Equals("true")
-                    ? user.Name + "_" + post.Id + post.Message + " : OK"
-                    : user.Name + "_" + post.Id + ": Fail";
+                if (rs.Equals("true"))
+                {
+                    _dao.InsertPostDone(post);
+                }
+                message = rs.Equals("true")
+                   ? user.Name + "_" + post.Id + post.Message + " : OK"
+                   : user.Name + "_" + post.Id + ": Fail";
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 message = e.Message;
                 // ignored

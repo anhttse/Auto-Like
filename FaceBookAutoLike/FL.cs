@@ -12,11 +12,12 @@ namespace FaceBookAutoLike
     using System;
     using System.Collections.Generic;
     
-    public partial class Token
+    public partial class FL
     {
-        public long ID { get; set; }
-        public string Token1 { get; set; }
+        public int ID { get; set; }
+        public string F_ID { get; set; }
         public string Name { get; set; }
-        public string User_ID { get; set; }
+        public string F_OF_ID { get; set; }
+        public Nullable<long> LC { get; set; }
     }
 }
