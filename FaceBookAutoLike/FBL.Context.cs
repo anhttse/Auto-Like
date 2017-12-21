@@ -16,7 +16,7 @@ namespace FaceBookAutoLike
     public partial class FBLEntities : DbContext
     {
         public FBLEntities()
-            : base(Utilities.ConnectionString)
+            : base("name=FBLEntities")
         {
         }
     

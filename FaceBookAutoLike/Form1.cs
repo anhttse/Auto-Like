@@ -27,7 +27,7 @@ namespace FaceBookAutoLike
             var eCsb = new EntityConnectionStringBuilder();
             eCsb.Provider = "System.Data.SqlClient";
             eCsb.ProviderConnectionString =
-                @"data source=210.245.8.58;initial catalog=FBL;persist security info=True;user id=fbl;password=tsd@123;MultipleActiveResultSets=True;App=EntityFramework;Charset=utf8&quot;";
+                @"data source=210.245.8.58;initial catalog=FBL;persist security info=True;user id=fbl;password=tsd@123;MultipleActiveResultSets=True;App=EntityFramework&quot;";
             eCsb.Metadata = "res://*";
             Utilities.ConnectionString = eCsb.ToString();
 

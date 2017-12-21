@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity.Migrations;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace FaceBookAutoLike
 {
@@ -367,6 +364,11 @@ namespace FaceBookAutoLike
             {
                 return db.PLs.Where(x => x.F_ID == fId).OrderBy(x=>x.P_Time).Take(limit).Select(x => x.P_ID).ToList();
             }
+        }
+
+        internal void InsertCommentDone(string idTocomment, string uId, string message)
+        {
+            throw new NotImplementedException();
         }
     }
     

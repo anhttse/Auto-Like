@@ -182,5 +182,34 @@ namespace FaceBookAutoLike
             var group = JsonConvert.DeserializeObject<Group>(js.ToString());
             return group;
         }
+
+        public string Comment(string idTocomment,string uId, string message)
+        {
+            var rsm = "";
+            try
+            {
+                var fbClient = new FacebookClient()
+                {
+                    AccessToken = Token
+                };
+                var url = $"https://graph.facebook.com/{Version}/{post.Id}/reactions";
+                var js = fbClient.Post(url, new { message = message });
+                var rs = JObject.FromObject(js).GetValue("success").ToString().ToLowerInvariant();
+                if (rs.Equals("true"))
+                {
+                    _dao.InsertCommentDone(idTocomment,uId,message);
+                }
+                var ms = DateTime.Now.ToString() + "-" + idTocomment;
+                rsm = rs.Equals("true")
+                   ? ms + " : OK"
+                   : ms + ": Fail";
+            }
+            catch (Exception e)
+            {
+                rsm = e.Message;
+                // ignored
+            }
+            return rsm;
+        }
     }
 }
