@@ -8,12 +8,12 @@ namespace FaceBookAutoLike
         public string Created_time { get; set; }
         public string Message { get; set; }
 
-        public Post(string id, string createdTime, string message)
-        {
-            Id = id;
-            Created_time = createdTime;
-            Message = message;
-        }
+        //public Post(string id, string createdTime, string message)
+        //{
+        //    Id = id;
+        //    Created_time = createdTime;
+        //    Message = message;
+        //}
     }
 
     public class Posts

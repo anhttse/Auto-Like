@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.EntityClient;
 using System.Drawing;
 using System.IO;
@@ -16,7 +17,10 @@ namespace FaceBookAutoLike
 
         private bool _isStart = true;
         private CancellationTokenSource cts;
-        private Thread _thAction;
+        private Thread _thReaction;
+        private Thread _thComment;
+        private int _commentTarget = 0;
+        private Auto _auto;
         public Form1()
         {
             InitializeComponent();
@@ -48,17 +52,19 @@ namespace FaceBookAutoLike
         {
             switch (((Button)sender).Name)
             {
+                #region React
+
                 case "btnStart":
-                    
                     //WriteToResource();
                     cts = new CancellationTokenSource();
-                    var auto = new Auto();
-                    auto.Token = txtToken.Text;
-                    auto.Version = txtVersion.Text;
+                    _auto = new Auto();
+                    _auto.Token = txtToken.Text;
+                    _auto.Version = txtVersion.Text;
 
                     var rbChecked = tabReact.Controls.OfType<RadioButton>()
                         .FirstOrDefault(r => r.Checked);
-                    var reactionType = Utilities.Reactions[Utilities.RBReactions.FirstOrDefault(x => x.Value == rbChecked?.Name).Key];
+                    var reactionType =
+                        Utilities.Reactions[Utilities.RBReactions.FirstOrDefault(x => x.Value == rbChecked?.Name).Key];
                     var delayTimeF = 120000;
                     var delayTimeP = 60000;
 
@@ -75,25 +81,56 @@ namespace FaceBookAutoLike
 
                     //auto.AutoReactFriends(reactionType, delayTimeF, delayTimeP, 25);
                     _isStart = true;
-                    _thAction = new Thread(() => Run(auto,reactionType, delayTimeF, delayTimeP, 25));
-                    _thAction.Start();
+                    _thReaction = new Thread(() => RunReact(_auto, reactionType, delayTimeF, delayTimeP, 25));
+                    _thReaction.Start();
                     btnStart.Enabled = false;
                     btnStop.Enabled = true;
                     break;
                 case "btnStop":
                     cts?.Cancel();
                     _isStart = false;
-                    
-                    _thAction.Abort();
+
+                    _thReaction.Abort();
                     btnStop.Enabled = false;
                     btnStart.Enabled = true;
                     MessageBox.Show("Done");
                     break;
+
+                #endregion
+
+
+                #region Comment
+
+                case "btnStartComment":
+
+                    _auto = new Auto();
+                    _auto.Token = txtToken.Text;
+                    _auto.Version = txtVersion.Text;
+                    var targetId = txtTartgetC.Text;
+                    var message = txtComment.Text;
+                    var fText = Utilities.convertToUnSign3(txtCFilter.Text);
+                    var tks = fText.Split(',').ToList();
+                    switch (_commentTarget)
+                    {
+                        case (int)Common.TargetComments.Group:
+                            _thComment = new Thread(()=>RunComment(_auto, targetId, 25,message,6000,tks));
+                            _thComment.Start();
+                            break;
+                        case (int)Common.TargetComments.YourPost:
+                            break;
+                        case (int)Common.TargetComments.FriendPost:
+                            break;
+                        case (int)Common.TargetComments.ReplyCommentInYourPost:
+                            break;
+                    }
+                    break;
+
+                    #endregion
             }
 
         }
 
-        private void Run(Auto auto,string reactionType, int delayTimeF, int delayTimeP, int limit)
+        private void RunReact(Auto auto, string reactionType, int delayTimeF, int delayTimeP, int limit)
         {
             do
             {
@@ -105,13 +142,22 @@ namespace FaceBookAutoLike
                 if (rsStart >= 0 && rsEnd <= 0)
                 {
                     this.pictureBox1.Image = global::FaceBookAutoLike.Properties.Resources.loading;
-                    auto.AutoReactFriends(pictureBox1,reactionType,delayTimeF,delayTimeP,10,cts.Token);
+                    auto.AutoReactFriends(pictureBox1, reactionType, delayTimeF, delayTimeP, 10, cts.Token);
                 }
                 Thread.Sleep(1000);
             } while (_isStart);
-            
+
         }
 
+        private async void RunComment(Auto auto, string gId,int limit,string message, int delayTime, List<string> mFilter)
+        {
+            do
+            {
+                await auto.AutoCommentPostOfGroup(gId, limit, message, delayTime, mFilter);
+                Thread.Sleep(2000);
+            } while (true);
+
+        }
         private void RemoveText(object sender, EventArgs e)
         {
             if (txtException.Text.Equals("Bỏ qua không tương tác với ID nằm trong danh sách, phân các nhau bằng dấu ','"))
@@ -139,7 +185,6 @@ namespace FaceBookAutoLike
                 rw.AddResource("GroupId", txtGroupId.Text);
                 rw.AddResource("CaptionFilter", txtCapFilter.Text);
                 rw.AddResource("Comment", txtComment.Text);
-                rw.AddResource("EnableComment", cbComment.Checked);
                 var rbChecked = Controls.OfType<RadioButton>()
                     .FirstOrDefault(r => r.Checked);
                 rw.AddResource("ReactionType", Utilities.RBReactions.FirstOrDefault(x => x.Value == rbChecked?.Name).Key);
@@ -160,6 +205,21 @@ namespace FaceBookAutoLike
             catch { }
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _commentTarget = cbSelect.SelectedIndex;
+
+        }
+
+        private void txtCFilter_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.Show("Lọc từ trong bài viết, phân cách bằng dấu ','", txtCFilter);
+        }
+
+        private void txtCFilter_MouseLeave(object sender, EventArgs e)
+        {
+            toolTip1.Hide(txtCFilter);
+        }
     }
 
 }

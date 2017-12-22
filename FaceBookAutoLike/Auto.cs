@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -183,7 +186,7 @@ namespace FaceBookAutoLike
             return group;
         }
 
-        public string Comment(string idTocomment,string uId, string message)
+        private Task<string> CommentGroupTask(string idTocomment, string uId, string message)
         {
             var rsm = "";
             try
@@ -192,24 +195,100 @@ namespace FaceBookAutoLike
                 {
                     AccessToken = Token
                 };
-                var url = $"https://graph.facebook.com/{Version}/{post.Id}/reactions";
+                var url = $"https://graph.facebook.com/{Version}/{idTocomment}/comments";
                 var js = fbClient.Post(url, new { message = message });
                 var rs = JObject.FromObject(js).GetValue("success").ToString().ToLowerInvariant();
                 if (rs.Equals("true"))
                 {
-                    _dao.InsertCommentDone(idTocomment,uId,message);
+                    var uCId = _dao.GetCurrentUserId(Token) ?? GetCurrentUser().Id;
+                    _dao.InsertCommentDone(idTocomment, uId, uCId, message);
                 }
-                var ms = DateTime.Now.ToString() + "-" + idTocomment;
+                var ms = DateTime.Now.ToString(CultureInfo.CurrentCulture) + "-" + idTocomment;
                 rsm = rs.Equals("true")
                    ? ms + " : OK"
                    : ms + ": Fail";
+                WriteResultToFile(rsm);
             }
             catch (Exception e)
             {
                 rsm = e.Message;
                 // ignored
             }
-            return rsm;
+            return Task.Factory.StartNew(() => rsm);
         }
+
+        public async Task<string> AutoCommentPostOfGroup(string gId, int limit, string message, int delayTime, List<string> mFilter)
+        {
+            try
+            {
+                var gr = getGroupInfo(gId);
+                var feeds = GetGroupFeeds(gId, limit, mFilter);
+                List<Task> lstTasks = new List<Task>();
+                Task<string> rs = null;
+                foreach (var feed in feeds.data)
+                {
+                    rs = CommentGroupTask(feed.Id, feed.from.Id, message);
+                    lstTasks.Add(rs);
+                    lstTasks.Add(Task.Delay(delayTime));
+
+                }
+                await Task.WhenAll(lstTasks);
+                WriteResultToFile($"{DateTime.Now.ToString(CultureInfo.CurrentCulture)}-Comment to {gr.Name}: done");
+                return rs.Result;
+            }
+            catch (Exception e)
+            {
+                Utilities.WriteLog(e.Message);
+                return null;
+            }
+
+
+        }
+
+        private Feeds GetGroupFeeds(string gId, int limit, List<string> mFilter)
+        {
+            try
+            {
+                var uCId = _dao.GetCurrentUserId(Token) ?? GetCurrentUser().Id;
+                var url = $"https://graph.facebook.com/{Version}/{gId}/feed?fields=from,message,created_time&limit={limit}";
+                var fbClient = new FacebookClient()
+                {
+                    AccessToken = Token
+                };
+                var js = fbClient.Get(url);
+                var feeds = JsonConvert.DeserializeObject<Feeds>(js.ToString());
+                var listCommentDone = _dao.GetCommentDoneList();
+                var data = feeds.data.Where(x => mFilter.Any(mf => Utilities.convertToUnSign3(x.Message).Contains(mf))&& !x.from.Id.Contains(uCId)).ToList();
+                feeds.data = data.Where(x => !listCommentDone.Contains(x.Id)).ToList();
+                return feeds;
+            }
+            catch (Exception e)
+            {
+                Utilities.WriteLog(e.Message);
+                return null;
+            }
+        }
+
+        private Group getGroupInfo(string gId)
+        {
+            try
+            {
+                var url = $"https://graph.facebook.com/{Version}/{gId}";
+                var fbClient = new FacebookClient()
+                {
+                    AccessToken = Token
+                };
+                var js = fbClient.Get(url);
+                var gr = JsonConvert.DeserializeObject<Group>(js.ToString());
+                return gr;
+            }
+            catch (Exception e)
+            {
+                Utilities.WriteLog(e.Message);
+                return null;
+            }
+        }
+
+
     }
 }

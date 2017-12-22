@@ -31,9 +31,17 @@ namespace FaceBookAutoLike
         /// </summary>
         protected void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnStopC = new System.Windows.Forms.Button();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtCFilter = new System.Windows.Forms.TextBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.btnStartComment = new System.Windows.Forms.Button();
+            this.txtTartgetC = new System.Windows.Forms.TextBox();
+            this.cbSelect = new System.Windows.Forms.ComboBox();
+            this.label15 = new System.Windows.Forms.Label();
             this.lbCmt = new System.Windows.Forms.Label();
-            this.cbComment = new System.Windows.Forms.CheckBox();
             this.txtComment = new System.Windows.Forms.TextBox();
             this.tabReact = new System.Windows.Forms.TabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -71,6 +79,7 @@ namespace FaceBookAutoLike
             this.txtToken = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tabControl = new System.Windows.Forms.TabControl();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tabPage2.SuspendLayout();
             this.tabReact.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -79,8 +88,15 @@ namespace FaceBookAutoLike
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnStopC);
+            this.tabPage2.Controls.Add(this.label17);
+            this.tabPage2.Controls.Add(this.txtCFilter);
+            this.tabPage2.Controls.Add(this.label16);
+            this.tabPage2.Controls.Add(this.btnStartComment);
+            this.tabPage2.Controls.Add(this.txtTartgetC);
+            this.tabPage2.Controls.Add(this.cbSelect);
+            this.tabPage2.Controls.Add(this.label15);
             this.tabPage2.Controls.Add(this.lbCmt);
-            this.tabPage2.Controls.Add(this.cbComment);
             this.tabPage2.Controls.Add(this.txtComment);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -90,32 +106,100 @@ namespace FaceBookAutoLike
             this.tabPage2.Text = "Comment";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnStopC
+            // 
+            this.btnStopC.Location = new System.Drawing.Point(354, 263);
+            this.btnStopC.Name = "btnStopC";
+            this.btnStopC.Size = new System.Drawing.Size(125, 40);
+            this.btnStopC.TabIndex = 52;
+            this.btnStopC.Text = "Stop";
+            this.btnStopC.UseVisualStyleBackColor = true;
+            this.btnStopC.Click += new System.EventHandler(this.btnClick);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(89, 101);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(60, 13);
+            this.label17.TabIndex = 51;
+            this.label17.Text = "Filter words";
+            // 
+            // txtCFilter
+            // 
+            this.txtCFilter.Location = new System.Drawing.Point(184, 89);
+            this.txtCFilter.Multiline = true;
+            this.txtCFilter.Name = "txtCFilter";
+            this.txtCFilter.Size = new System.Drawing.Size(324, 35);
+            this.txtCFilter.TabIndex = 50;
+            this.txtCFilter.MouseLeave += new System.EventHandler(this.txtCFilter_MouseLeave);
+            this.txtCFilter.MouseHover += new System.EventHandler(this.txtCFilter_MouseHover);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(95, 66);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(49, 13);
+            this.label16.TabIndex = 49;
+            this.label16.Text = "Target id";
+            // 
+            // btnStartComment
+            // 
+            this.btnStartComment.Location = new System.Drawing.Point(184, 263);
+            this.btnStartComment.Name = "btnStartComment";
+            this.btnStartComment.Size = new System.Drawing.Size(125, 40);
+            this.btnStartComment.TabIndex = 48;
+            this.btnStartComment.Text = "Start";
+            this.btnStartComment.UseVisualStyleBackColor = true;
+            this.btnStartComment.Click += new System.EventHandler(this.btnClick);
+            // 
+            // txtTartgetC
+            // 
+            this.txtTartgetC.Location = new System.Drawing.Point(184, 63);
+            this.txtTartgetC.Name = "txtTartgetC";
+            this.txtTartgetC.Size = new System.Drawing.Size(324, 20);
+            this.txtTartgetC.TabIndex = 47;
+            // 
+            // cbSelect
+            // 
+            this.cbSelect.FormattingEnabled = true;
+            this.cbSelect.Items.AddRange(new object[] {
+            "Group",
+            "Friend Post",
+            "Your Post",
+            "Reply Comment In Your Post"});
+            this.cbSelect.Location = new System.Drawing.Point(184, 27);
+            this.cbSelect.Name = "cbSelect";
+            this.cbSelect.Size = new System.Drawing.Size(324, 21);
+            this.cbSelect.TabIndex = 46;
+            this.cbSelect.Text = "Select";
+            this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(81, 30);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(63, 13);
+            this.label15.TabIndex = 45;
+            this.label15.Text = "Comment to";
+            // 
             // lbCmt
             // 
             this.lbCmt.AutoSize = true;
-            this.lbCmt.Location = new System.Drawing.Point(61, 179);
+            this.lbCmt.Location = new System.Drawing.Point(93, 192);
             this.lbCmt.Name = "lbCmt";
             this.lbCmt.Size = new System.Drawing.Size(51, 13);
             this.lbCmt.TabIndex = 44;
             this.lbCmt.Text = "Comment";
             // 
-            // cbComment
-            // 
-            this.cbComment.AutoSize = true;
-            this.cbComment.Location = new System.Drawing.Point(478, 178);
-            this.cbComment.Name = "cbComment";
-            this.cbComment.Size = new System.Drawing.Size(59, 17);
-            this.cbComment.TabIndex = 43;
-            this.cbComment.Text = "Enable";
-            this.cbComment.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.cbComment.UseVisualStyleBackColor = true;
-            // 
             // txtComment
             // 
-            this.txtComment.Location = new System.Drawing.Point(148, 156);
+            this.txtComment.Location = new System.Drawing.Point(184, 166);
             this.txtComment.Multiline = true;
             this.txtComment.Name = "txtComment";
-            this.txtComment.Size = new System.Drawing.Size(324, 60);
+            this.txtComment.Size = new System.Drawing.Size(324, 62);
             this.txtComment.TabIndex = 42;
             // 
             // tabReact
@@ -164,7 +248,6 @@ namespace FaceBookAutoLike
             // 
             // pictureBox1
             // 
-            
             this.pictureBox1.Location = new System.Drawing.Point(448, 266);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(28, 28);
@@ -341,13 +424,13 @@ namespace FaceBookAutoLike
             // 
             // btnStop
             // 
+            this.btnStop.Enabled = false;
             this.btnStop.Location = new System.Drawing.Point(368, 312);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(174, 37);
             this.btnStop.TabIndex = 34;
             this.btnStop.Text = "Stop";
             this.btnStop.UseVisualStyleBackColor = true;
-            this.btnStop.Enabled = false;
             this.btnStop.Click += new System.EventHandler(this.btnClick);
             // 
             // btnStart
@@ -499,7 +582,6 @@ namespace FaceBookAutoLike
 
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label lbCmt;
-        private System.Windows.Forms.CheckBox cbComment;
         public System.Windows.Forms.TextBox txtComment;
         private System.Windows.Forms.TabPage tabReact;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -537,6 +619,15 @@ namespace FaceBookAutoLike
         private System.Windows.Forms.TextBox txtToken;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabControl tabControl;
+        private ComboBox cbSelect;
+        private Label label15;
+        private TextBox txtTartgetC;
+        private Label label16;
+        private Button btnStartComment;
+        private TextBox txtCFilter;
+        private Button btnStopC;
+        private Label label17;
+        private ToolTip toolTip1;
     }
 }
 

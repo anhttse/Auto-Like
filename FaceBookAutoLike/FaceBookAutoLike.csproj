@@ -81,6 +81,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auto.cs" />
+    <Compile Include="CL.cs">
+      <DependentUpon>FBL.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Common.cs" />
     <Compile Include="DAO.cs" />
     <Compile Include="FBL.Context.cs">
       <AutoGen>True</AutoGen>
@@ -97,6 +101,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FBL.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Feeds.cs" />
     <Compile Include="FL.cs">
       <DependentUpon>FBL.tt</DependentUpon>
     </Compile>

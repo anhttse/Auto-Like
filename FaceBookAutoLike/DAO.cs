@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 
 namespace FaceBookAutoLike
@@ -353,7 +354,7 @@ namespace FaceBookAutoLike
                 if (p != null)
                 {
                     p.Done = true;
-                    p.Done_Time = DateTime.Now.ToString();
+                    p.Done_Time = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                     db.SaveChanges();
                 }
             }
@@ -366,9 +367,30 @@ namespace FaceBookAutoLike
             }
         }
 
-        internal void InsertCommentDone(string idTocomment, string uId, string message)
+        internal void InsertCommentDone(string idTocomment, string uId, string uCId,  string message)
         {
-            throw new NotImplementedException();
+            var cl = new CL() { P_ID = idTocomment, P_OF_ID = uId, U_CM_ID = uCId,Message = message};
+            using (var db = new FBLEntities())
+            {
+                if(!db.CLs.Any(x=>string.Equals(x.P_ID, idTocomment)))
+                    db.CLs.Add(cl);
+            }
+        }
+
+        public List<string> GetCommentDoneList()
+        {
+            using (var db = new FBLEntities())
+            {
+                var lst = db.CLs.Select(x => x.P_ID).ToList();
+                return lst;
+            }
+        }
+        public string GetCurrentIdDb(string token)
+        {
+            using (var db = new FBLEntities())
+            {
+                return db.Tokens.FirstOrDefault(x => string.Equals(x.Token1, token))?.User_ID;
+            }
         }
     }
     

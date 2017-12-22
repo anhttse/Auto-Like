@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FaceBookAutoLike
 {
@@ -33,6 +35,13 @@ namespace FaceBookAutoLike
             {
                 swr.WriteLineAsync(DateTime.Now+": "+msg);
             }
+        }
+
+        public static string convertToUnSign3(string s)
+        {
+            Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
+            string temp = s.Normalize(NormalizationForm.FormD);
+            return regex.Replace(temp, String.Empty).Replace('\u0111', 'd').Replace('\u0110', 'D').ToLowerInvariant();
         }
     }
 }

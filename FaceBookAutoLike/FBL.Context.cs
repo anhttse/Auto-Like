@@ -16,7 +16,7 @@ namespace FaceBookAutoLike
     public partial class FBLEntities : DbContext
     {
         public FBLEntities()
-            : base("name=FBLEntities")
+            : base(Utilities.ConnectionString)
         {
         }
     
@@ -28,5 +28,6 @@ namespace FaceBookAutoLike
         public DbSet<FL> FLs { get; set; }
         public DbSet<PL> PLs { get; set; }
         public DbSet<Token> Tokens { get; set; }
+        public DbSet<CL> CLs { get; set; }
     }
 }
