@@ -186,7 +186,7 @@ namespace FaceBookAutoLike
             return group;
         }
 
-        private Task<string> CommentGroupTask(string idTocomment, string uId, string message)
+        private Task<string> CommentGroupTask(string idTocomment, string uId, string message, int typeC)
         {
             var rsm = "";
             try
@@ -197,14 +197,14 @@ namespace FaceBookAutoLike
                 };
                 var url = $"https://graph.facebook.com/{Version}/{idTocomment}/comments";
                 var js = fbClient.Post(url, new { message = message });
-                var rs = JObject.FromObject(js).GetValue("success").ToString().ToLowerInvariant();
-                if (rs.Equals("true"))
+                var rs = JObject.FromObject(js).GetValue("id").ToString().ToLowerInvariant();
+                if (!string.IsNullOrEmpty(rs))
                 {
                     var uCId = _dao.GetCurrentUserId(Token) ?? GetCurrentUser().Id;
-                    _dao.InsertCommentDone(idTocomment, uId, uCId, message);
+                    _dao.InsertCommentDone(idTocomment, uId, uCId, message, typeC);
                 }
                 var ms = DateTime.Now.ToString(CultureInfo.CurrentCulture) + "-" + idTocomment;
-                rsm = rs.Equals("true")
+                rsm = !string.IsNullOrEmpty(rs)
                    ? ms + " : OK"
                    : ms + ": Fail";
                 WriteResultToFile(rsm);
@@ -217,7 +217,7 @@ namespace FaceBookAutoLike
             return Task.Factory.StartNew(() => rsm);
         }
 
-        public async Task<string> AutoCommentPostOfGroup(string gId, int limit, string message, int delayTime, List<string> mFilter)
+        public async Task<string> AutoCommentPostOfGroup(string gId, int limit, string message, int delayTime, List<string> mFilter, int typeC)
         {
             try
             {
@@ -227,7 +227,7 @@ namespace FaceBookAutoLike
                 Task<string> rs = null;
                 foreach (var feed in feeds.data)
                 {
-                    rs = CommentGroupTask(feed.Id, feed.from.Id, message);
+                    rs = CommentGroupTask(feed.Id, feed.from.Id, message, typeC);
                     lstTasks.Add(rs);
                     lstTasks.Add(Task.Delay(delayTime));
 
@@ -257,7 +257,7 @@ namespace FaceBookAutoLike
                 };
                 var js = fbClient.Get(url);
                 var feeds = JsonConvert.DeserializeObject<Feeds>(js.ToString());
-                var listCommentDone = _dao.GetCommentDoneList();
+                var listCommentDone = _dao.GetCommentDoneList(0);
                 var data = feeds.data.Where(x => mFilter.Any(mf => Utilities.convertToUnSign3(x.Message).Contains(mf))&& !x.from.Id.Contains(uCId)).ToList();
                 feeds.data = data.Where(x => !listCommentDone.Contains(x.Id)).ToList();
                 return feeds;

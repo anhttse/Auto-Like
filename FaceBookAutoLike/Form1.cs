@@ -113,7 +113,7 @@ namespace FaceBookAutoLike
                     switch (_commentTarget)
                     {
                         case (int)Common.TargetComments.Group:
-                            _thComment = new Thread(()=>RunComment(_auto, targetId, 25,message,6000,tks));
+                            _thComment = new Thread(()=>RunComment(_auto, targetId, 25,message,6000,tks,0));
                             _thComment.Start();
                             break;
                         case (int)Common.TargetComments.YourPost:
@@ -149,11 +149,11 @@ namespace FaceBookAutoLike
 
         }
 
-        private async void RunComment(Auto auto, string gId,int limit,string message, int delayTime, List<string> mFilter)
+        private async void RunComment(Auto auto, string gId,int limit,string message, int delayTime, List<string> mFilter, int typeC)
         {
             do
             {
-                await auto.AutoCommentPostOfGroup(gId, limit, message, delayTime, mFilter);
+                await auto.AutoCommentPostOfGroup(gId, limit, message, delayTime, mFilter, typeC);
                 Thread.Sleep(2000);
             } while (true);
 

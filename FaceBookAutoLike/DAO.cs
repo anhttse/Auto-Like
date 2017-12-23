@@ -367,21 +367,22 @@ namespace FaceBookAutoLike
             }
         }
 
-        internal void InsertCommentDone(string idTocomment, string uId, string uCId,  string message)
+        internal void InsertCommentDone(string idTocomment, string uId, string uCId,  string message, int cltype)
         {
-            var cl = new CL() { P_ID = idTocomment, P_OF_ID = uId, U_CM_ID = uCId,Message = message};
+            var cl = new CL() { P_ID = idTocomment, P_OF_ID = uId, U_CM_ID = uCId,Message = message, CL_TYPE = cltype};
             using (var db = new FBLEntities())
             {
                 if(!db.CLs.Any(x=>string.Equals(x.P_ID, idTocomment)))
                     db.CLs.Add(cl);
+                db.SaveChanges();
             }
         }
 
-        public List<string> GetCommentDoneList()
+        public List<string> GetCommentDoneList(int typeC)
         {
             using (var db = new FBLEntities())
             {
-                var lst = db.CLs.Select(x => x.P_ID).ToList();
+                var lst = db.CLs.Where(c=>c.CL_TYPE==typeC).Select(x => x.P_ID).ToList();
                 return lst;
             }
         }

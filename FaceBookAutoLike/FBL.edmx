@@ -16,6 +16,7 @@
           <Property Name="Is_Sub" Type="bit" />
           <Property Name="U_CM_ID" Type="nvarchar" MaxLength="50" />
           <Property Name="Sub_Done_Time" Type="nvarchar" MaxLength="100" />
+          <Property Name="CL_TYPE" Type="int" />
         </EntityType>
         <EntityType Name="FL">
           <Key>
@@ -106,6 +107,7 @@
           <Property Name="Is_Sub" Type="Boolean" />
           <Property Name="U_CM_ID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sub_Done_Time" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CL_TYPE" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -150,6 +152,7 @@
           <EntitySetMapping Name="CLs">
             <EntityTypeMapping TypeName="FBLModel.CL">
               <MappingFragment StoreEntitySet="CL">
+                <ScalarProperty Name="CL_TYPE" ColumnName="CL_TYPE" />
                 <ScalarProperty Name="Sub_Done_Time" ColumnName="Sub_Done_Time" />
                 <ScalarProperty Name="U_CM_ID" ColumnName="U_CM_ID" />
                 <ScalarProperty Name="Is_Sub" ColumnName="Is_Sub" />

@@ -21,5 +21,6 @@ namespace FaceBookAutoLike
         public Nullable<bool> Is_Sub { get; set; }
         public string U_CM_ID { get; set; }
         public string Sub_Done_Time { get; set; }
+        public Nullable<int> CL_TYPE { get; set; }
     }
 }
